@@ -1,4 +1,5 @@
 'use client';
+import {sitePath} from '../lib/site';
 import {useEffect,useState} from 'react';
 import {week} from '../lib/data';
 export function Motion(){useEffect(()=>{let ctx;let lenis; (async()=>{const {gsap}=await import('gsap');const {ScrollTrigger}=await import('gsap/ScrollTrigger');gsap.registerPlugin(ScrollTrigger);if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;const Lenis=(await import('lenis')).default; lenis=new Lenis({autoRaf:true}); ctx=gsap.context(()=>{gsap.utils.toArray('.reveal').forEach(el=>gsap.from(el,{y:45,opacity:0,duration:1.3,scrollTrigger:{trigger:el,start:'top 88%'}}));gsap.utils.toArray('.value').forEach(el=>gsap.from(el.querySelector('strong'),{x:-35,opacity:0,duration:1.1,scrollTrigger:{trigger:el,start:'top 85%'}}));const dojoScene = gsap.timeline({
@@ -37,10 +38,10 @@ export function Opening(){
   const [visible,setVisible]=useState(true);
   return visible?<div className="opening" aria-hidden="true" onAnimationEnd={event=>{
     if(event.target===event.currentTarget && event.animationName==='opening-fade') setVisible(false);
-  }}><img src="/images/eisinkan-logo-trimmed.png" alt="" width="1566" height="683"/><span>EISINKAN</span></div>:null;
+  }}><img src={sitePath("/images/eisinkan-logo-trimmed.png")} alt="" width="1566" height="683"/><span>EISINKAN</span></div>:null;
 }
-export function Menu(){const [open,setOpen]=useState(false);useEffect(()=>{if(!open)return;const close=e=>{if(e.key==='Escape')setOpen(false)};document.addEventListener('keydown',close);return()=>document.removeEventListener('keydown',close)},[open]);return <><button className="menu-button" onClick={()=>setOpen(!open)} aria-expanded={open}>{open?'CLOSE':'MENU'} <span>{open?'×':'☰'}</span></button>{open&&<nav className="overlay" aria-label="メニュー">{[['HOME','/'],['ABOUT','/#about'],['MASTER','/boss/'],['DOJOS','/#dojos'],['SCHEDULE','/#schedule'],['CONTACT','/#contact']].map(([n,h])=><a onClick={()=>setOpen(false)} href={h} key={n}>{n}</a>)}</nav>}</>}
-export function Schedule(){const [day,setDay]=useState(0);return <div className="schedule"><div className="days" role="tablist">{week.map((w,i)=><button role="tab" aria-selected={i===day} onClick={()=>setDay(i)} key={w.day}>{w.day}<small>{['MON','TUE','WED','THU','FRI','SAT','SUN'][i]}</small></button>)}</div><div className="schedule-list">{week[day].items.length?week[day].items.map((x,i)=><a href={'/'+x.slug+'/'} className="schedule-row" key={i}><strong>{x.time}</strong><span>{x.name}</span><span>{x.dojo}</span><b>↗</b></a>):<p>掲載されている稽古情報はありません。</p>}</div></div>}
+export function Menu(){const [open,setOpen]=useState(false);useEffect(()=>{if(!open)return;const close=e=>{if(e.key==='Escape')setOpen(false)};document.addEventListener('keydown',close);return()=>document.removeEventListener('keydown',close)},[open]);return <><button className="menu-button" onClick={()=>setOpen(!open)} aria-expanded={open}>{open?'CLOSE':'MENU'} <span>{open?'×':'☰'}</span></button>{open&&<nav className="overlay" aria-label="メニュー">{[['HOME','/'],['ABOUT','/#about'],['MASTER','/boss/'],['DOJOS','/#dojos'],['SCHEDULE','/#schedule'],['CONTACT','/#contact']].map(([n,h])=><a onClick={()=>setOpen(false)} href={sitePath(h)} key={n}>{n}</a>)}</nav>}</>}
+export function Schedule(){const [day,setDay]=useState(0);return <div className="schedule"><div className="days" role="tablist">{week.map((w,i)=><button role="tab" aria-selected={i===day} onClick={()=>setDay(i)} key={w.day}>{w.day}<small>{['MON','TUE','WED','THU','FRI','SAT','SUN'][i]}</small></button>)}</div><div className="schedule-list">{week[day].items.length?week[day].items.map((x,i)=><a href={sitePath('/'+x.slug+'/')} className="schedule-row" key={i}><strong>{x.time}</strong><span>{x.name}</span><span>{x.dojo}</span><b>↗</b></a>):<p>掲載されている稽古情報はありません。</p>}</div></div>}
 
 export function Calendar(){
   const [month,setMonth]=useState(null);

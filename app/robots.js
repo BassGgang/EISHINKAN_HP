@@ -1,1 +1,3 @@
-export default function robots(){return {rules:{userAgent:'*',allow:'/'},sitemap:'https://eisinkan.com/sitemap.xml'}}
+export const dynamic = 'force-static';
+import {siteUrl} from '../lib/site';
+export default function robots(){return {rules:{userAgent:'*',allow:'/'},sitemap:siteUrl('/sitemap.xml')}}
